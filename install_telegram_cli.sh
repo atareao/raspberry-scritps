@@ -20,6 +20,7 @@ cd tg
 ./configure
 make
 cp bin/telegram-cli /usr/bin
+mkdir -p /etc/telegram-cli
 cp server.pub /etc/telegram-cli/server.pub
 cd ..
-rm -rf tg
+#rm -rf tg
