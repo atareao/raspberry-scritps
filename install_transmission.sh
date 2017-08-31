@@ -19,7 +19,7 @@ echo "=== Stopping transmission daemon ==="
 /etc/init.d/transmission-daemon stop
 
 echo "=== our user pi in debian-transmission group ==="
-usermod -a -G pi debian-transmission
+usermod -aG debian-transmission pi
 #maybe: transmission-daemon group
 
 echo "=== Creating directories ==="
@@ -50,6 +50,3 @@ jq '.["rpc-whitelist"]'='"0.0.0.0"' $SETTINGS > $TEMPORAL && mv $TEMPORAL $SETTI
 jq '.["rpc-whitelist-enabled"]'='false' $SETTINGS > $TEMPORAL && mv $TEMPORAL $SETTINGS
 
 /etc/init.d/transmission-daemon start
-
-
-
