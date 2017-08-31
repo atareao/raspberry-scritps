@@ -16,7 +16,7 @@ echo "=== Installing transmission ==="
 apt install -y transmission-daemon
 
 echo "=== Stopping transmission daemon ==="
-service transmission-daemon stop 
+/etc/init.d/transmission-daemon stop
 
 echo "=== our user pi in debian-transmission group ==="
 usermod -a -G pi debian-transmission
@@ -49,7 +49,7 @@ jq '.["rpc-username"]'='"pi"' $SETTINGS > $TEMPORAL && mv $TEMPORAL $SETTINGS
 jq '.["rpc-whitelist"]'='"0.0.0.0"' $SETTINGS > $TEMPORAL && mv $TEMPORAL $SETTINGS
 jq '.["rpc-whitelist-enabled"]'='false' $SETTINGS > $TEMPORAL && mv $TEMPORAL $SETTINGS
 
-service transmission-daemon start
+/etc/init.d/transmission-daemon start
 
 
 
