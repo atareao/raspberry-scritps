@@ -15,28 +15,23 @@ apt install -y cups cups-pdf printer-driver-gutenprint
 echo "=== our user pi in lpadmin group ==="
 usermod -aG lpadmin pi
 
-echo "Configure cups to listen on the LAN"
-sed -i "s|Listen localhost:631|Listen *:631|" /etc/cups/cupsd.conf
+echo "=== Configure cups to listen on the LAN"
+sed -i "s|Listen localhost:631|Port 631|" /etc/cups/cupsd.conf
 
-echo "Allow LAN access to CUPS"
-sed -i "s|</Location>|Allow all\n</Location>|g" /etc/cups/cupsd.conf
+echo "=== Allow LAN access to CUPS"
+sed -i "s|</Location>|Allow @local\n</Location>|g" /etc/cups/cupsd.conf
 
 echo -e "\nServerName raspberrypi" >> /etc/cups/cupsd.conf
 sed -i -e "s|BrowseAddress|BrowseAddress 192.168.1.255\n#BrowseAddress|" /etc/cups/cupsd.conf
 
 
-echo "Enable print sharing and remote administration"
-cupsctl --share-printers --remote-admin --remote-printers
+echo "=== Enable print sharing and remote administration ==="
+cupsctl --share-printers --remote-admin
 sed -i "s|Shared No|Shared Yes|g" /etc/cups/printers.conf
 lpoptions -d PDF -o printer-is-shared=true
 
-echo "Custom cups-pdf output directory"
-mkdir -p /storage/pdf
-chown root:lpadmin /storage/pdf
-chmod 775 /storage/pdf
+echo "=== Enable automatic retrying of failed print jobs ==="
+sed -i -e "s|BrowseAddress|ErrorPolicy retry-job\nJobRetryInterval 30\nBrowseAddress|" /etc/cups/cupsd.conf
 
-echo "Enable automatic retrying of failed print jobs"
-sed -i -e "s|BrowseAddress|ErrorPolicy retry-job\nJobRetryInterval 30\nBrowseAddress|" /etc/cups/cupsd.co
-
-echo "Restart cups"
-service cups restart
+echo "=== Restart cups ==="
+/etc/init.d/cups restart
