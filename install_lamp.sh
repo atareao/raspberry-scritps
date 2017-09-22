@@ -5,8 +5,7 @@ if [ "$(whoami)" != "root" ]; then
     exit
 fi
 
-echo "deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi" > /etc/apt/sources.list.d/stretch.list
-#echo "APT::Default-Release \"jessie\";" > /etc/apt/apt.conf.d/99-default-release
+echo "deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi" > /etc/apt/sources.list.d/stretch.$
 cat > /etc/apt/preferences << "EOF"
 Package: *
 Pin: release n=jessie
@@ -23,10 +22,13 @@ apt dist-upgrade -y
 apt install -y apache2
 
 ## Installation of PHP 7
-apt install -t stretch -y php7.0 php7.0-bz2 php7.0-cli php7.0-curl php7.0-gd php7.0-fpm php7.0-intl php7.0-json php7.0-mbstring php7.0-mcrypt php7.0-mysql php7.0-opcache php7.0-xml php7.0-zip php-imagick php-redis mariadb-server libapache2-mod-php7.0 apache2
+apt install -t stretch -y php7.0 php7.0-mysql libapache2-mod-php7.0
 
 mkdir /var/www/html
 chown www-data:www-data /var/www/html
+find /var/www/html -type d -print -exec chmod 775 {} \;
+find /var/www/html -type f -print -exec chmod 664 {} \;
+usermod -aG www-data pi
 cat > /var/www/html/index.php << "EOF"
 <?php phpinfo(); ?>
 EOF
@@ -35,10 +37,4 @@ EOF
 apt install mariadb-server
 mysql -u user -p
 
-## phpMyAdmin
-apt install phpmyadmin
-cat > nano /etc/apache2/apache2.conf << "EOF"
-Include /etc/phpmyadmin/apache.conf
-EOF
-
-service apache2 restart
+/etc/init.d/apache2 restart
