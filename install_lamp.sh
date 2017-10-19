@@ -5,8 +5,7 @@ if [ "$(whoami)" != "root" ]; then
     exit
 fi
 
-echo "deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi" > /etc/apt/sources.list.d/stretch.list
-#echo "APT::Default-Release \"jessie\";" > /etc/apt/apt.conf.d/99-default-release
+echo "deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi" > /etc/apt/sources.list.d/stretch.$
 cat > /etc/apt/preferences << "EOF"
 Package: *
 Pin: release n=jessie
@@ -27,6 +26,9 @@ apt install -t stretch -y php7.0 php7.0-mysql libapache2-mod-php7.0
 
 mkdir /var/www/html
 chown www-data:www-data /var/www/html
+find /var/www/html -type d -print -exec chmod 775 {} \;
+find /var/www/html -type f -print -exec chmod 664 {} \;
+usermod -aG www-data pi
 cat > /var/www/html/index.php << "EOF"
 <?php phpinfo(); ?>
 EOF
