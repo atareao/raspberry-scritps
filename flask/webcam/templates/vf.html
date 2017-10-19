@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block content %}
+    {% if switche %}
+        <img src="{{ url_for('video_feed') }}" class="video">
+    {% else %}
+        {{ super() }}
+        <p>gujana </p>
+    {% endif %}
+{% endblock content %}

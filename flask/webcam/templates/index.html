@@ -1,0 +1,12 @@
+<div class="container">
+    <h1>Hello from a template!</h1>
+    <div class="controls">
+
+        <a id="startStop" href="/startStop/start" class="btn btn-block btn-lg btn-default" role="button">Turn on</a>
+        <a id="picture" href="/picture/take" class="btn btn-block btn-lg btn-default" role="button">Take a picture</a>
+
+    </div>
+    {% block content %}
+        <div>The Default Thing</div>
+    {% endblock content %}
+</div>
